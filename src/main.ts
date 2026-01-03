@@ -365,7 +365,7 @@ const createMouseTrail = () => {
 }
 
 // Enable mouse trail (comment out if not wanted)
-// createMouseTrail()
+createMouseTrail()
 
 // ============================================
 // REAL INK UNIQUE: Typewriter Demo Animation
