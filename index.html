@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en" class="loading">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Real Ink? - AI Text Detection</title>
+    <meta name="description" content="Detect AI-generated text instantly as you browse. 100% offline, no data collection. Free browser extension for Chrome and Firefox.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+      /* FOUC Prevention - hide everything until ready */
+      html.loading { visibility: hidden; }
+      html.loading * { animation: none !important; transition: none !important; }
+      /* Hide animated elements by default */
+      .fade-in, .slide-in-left, .slide-in-right, .scale-in { opacity: 0; }
+      .stagger-children > * { opacity: 0; }
+    </style>
+    <script type="module" crossorigin src="/assets/index-DGm2rSV0.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-Fzbtodpm.css">
+  </head>
+  <body>
+    <!-- Paper Texture Overlay - unique to Real Ink -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Ink Splatter Decorations - unique to Real Ink -->
+    <div class="ink-splatter ink-splatter-1" aria-hidden="true"></div>
+    <div class="ink-splatter ink-splatter-2" aria-hidden="true"></div>
+    <div class="ink-splatter ink-splatter-3" aria-hidden="true"></div>
+
+    <header class="header">
+      <div class="container header-content">
+        <a href="#" class="logo">
+          <div class="logo-icon">Ink</div>
+          Real Ink?
+        </a>
+        <nav class="nav">
+          <a href="#features">Features</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="#detection">Detection</a>
+          <a href="#faq">FAQ</a>
+          <a href="#more">More</a>
+        </nav>
+        <a href="#" class="btn">
+          Get Extension
+        </a>
+        <button class="mobile-menu-btn" aria-label="Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <!-- Scroll Progress Bar -->
+      <div class="scroll-progress" id="scroll-progress"></div>
+
+      <section class="hero">
+        <!-- Hero Spotlight (follows mouse) -->
+        <div class="hero-spotlight" id="hero-spotlight"></div>
+
+        <!-- Floating Decorative Shapes with Parallax -->
+        <div class="hero-shapes">
+          <div class="shape shape-1" data-parallax="0.05"></div>
+          <div class="shape shape-2" data-parallax="0.08"></div>
+          <div class="shape shape-3" data-parallax="0.03"></div>
+          <div class="shape shape-4" data-parallax="0.06"></div>
+        </div>
+        <div class="container" style="position: relative; z-index: 2;">
+          <div class="hero-badge">
+            <span>NEW</span>
+            100% Offline Detection
+          </div>
+          <h1>detect <span class="highlight gradient-text handwritten-underline">AI-generated</span> text instantly</h1>
+          <p>Spot machine-written content as you browse. No cloud. No data collection. Just real answers about what you're reading.</p>
+          <div class="hero-buttons">
+            <a href="#" class="btn btn-lg btn-magnetic">
+              <span class="btn-text">Add to Chrome</span>
+            </a>
+            <a href="https://addons.mozilla.org/en-US/firefox/addon/real-ink/" class="btn btn-lg btn-outline btn-magnetic" target="_blank" rel="noopener">
+              <span class="btn-text">Add to Firefox</span>
+            </a>
+          </div>
+
+          <!-- Real Ink Unique: Live Typewriter Demo -->
+          <div class="typewriter-demo fade-in">
+            <div class="typewriter-card">
+              <div class="typewriter-header">
+                <div class="typewriter-dots">
+                  <span></span><span></span><span></span>
+                </div>
+                <span class="typewriter-title">live_analysis.txt</span>
+              </div>
+              <div class="typewriter-content">
+                <div class="typewriter-line" id="typewriter-line">
+                  <span class="line-prompt">></span>
+                  <span class="line-text"></span>
+                  <span class="cursor"></span>
+                </div>
+                <div class="typewriter-result" id="typewriter-result"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Real Ink Unique: Paper Detection Demo -->
+          <div class="ink-demo fade-in">
+            <div class="ink-card-glow"></div>
+            <div class="ink-card">
+              <div class="ink-scan-bar"></div>
+              <div class="ink-particles"></div>
+              <div class="ink-header">
+                <div class="ink-header-left">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.375 2.625a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4Z"/>
+                  </svg>
+                  <span class="ink-header-title">Text Analysis</span>
+                </div>
+                <div class="ink-status">
+                  <span class="ink-status-dot"></span>
+                  Live
+                </div>
+              </div>
+              <div class="ink-body">
+                <p><span class="ink-ai">The transformative potential of artificial intelligence represents a paradigm shift in how we approach complex challenges.</span> Meanwhile, <span class="ink-human">my cat knocked over my coffee this morning and I'm still annoyed about it.</span> <span class="ink-ai">It's important to note that these developments have significant implications.</span></p>
+              </div>
+              <div class="ink-footer">
+                <div class="ink-analysis-bar">
+                  <div class="ink-analysis-segment ai"></div>
+                  <div class="ink-analysis-segment human"></div>
+                </div>
+                <div class="ink-legend">
+                  <div class="legend-tag ai">
+                    <span class="dot"></span>
+                    AI Generated
+                    <span class="pct">67%</span>
+                  </div>
+                  <div class="legend-tag human">
+                    <span class="dot"></span>
+                    Human Written
+                    <span class="pct">33%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="stats-bar">
+        <div class="container">
+          <div class="stats-grid fade-in">
+            <div class="stat-item">
+              <div class="stat-number" data-count="50">50K+</div>
+              <div class="stat-label">Active Users</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number" data-count="10">10M+</div>
+              <div class="stat-label">Texts Analyzed</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number" data-count="5">5</div>
+              <div class="stat-label">Languages</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number" data-count="100">100%</div>
+              <div class="stat-label">Private</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Trust Marquee -->
+      <section class="trust-marquee">
+        <div class="marquee-track">
+          <div class="marquee-content">
+            <span class="marquee-item">Trusted by researchers</span>
+            <span class="marquee-dot"></span>
+            <span class="marquee-item">100% Open Source</span>
+            <span class="marquee-dot"></span>
+            <span class="marquee-item">No cloud required</span>
+            <span class="marquee-dot"></span>
+            <span class="marquee-item">Privacy first</span>
+            <span class="marquee-dot"></span>
+            <span class="marquee-item">Works offline</span>
+            <span class="marquee-dot"></span>
+            <span class="marquee-item">Free forever</span>
+            <span class="marquee-dot"></span>
+            <span class="marquee-item">Trusted by researchers</span>
+            <span class="marquee-dot"></span>
+            <span class="marquee-item">100% Open Source</span>
+            <span class="marquee-dot"></span>
+            <span class="marquee-item">No cloud required</span>
+            <span class="marquee-dot"></span>
+            <span class="marquee-item">Privacy first</span>
+            <span class="marquee-dot"></span>
+            <span class="marquee-item">Works offline</span>
+            <span class="marquee-dot"></span>
+            <span class="marquee-item">Free forever</span>
+            <span class="marquee-dot"></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="features" id="features">
+        <div class="container">
+          <div class="section-header fade-in">
+            <div class="section-badge">Features</div>
+            <h2>everything you need</h2>
+            <p>Powerful tools to verify text authenticity while browsing</p>
+          </div>
+          <div class="features-grid stagger-children">
+            <div class="feature-card">
+              <div class="feature-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                  <path d="M18.375 2.625a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4Z"/>
+                </svg>
+              </div>
+              <h3>Inline Highlighting</h3>
+              <p>Color-coded highlighting shows AI probability directly on the page as you read. Red for AI, green for human.</p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="4" width="20" height="16" rx="2"/>
+                  <path d="M6 8h.01M10 8h.01M14 8h.01"/>
+                  <path d="M18 8h.01M8 12h.01M12 12h.01"/>
+                  <path d="M16 12h.01M6 16h12"/>
+                </svg>
+              </div>
+              <h3>Keyboard Navigation</h3>
+              <p>Jump between detections with J/K keys. Navigate findings without leaving your keyboard.</p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"/>
+                  <path d="m21 21-4.3-4.3"/>
+                  <path d="M11 8v6M8 11h6"/>
+                </svg>
+              </div>
+              <h3>Detailed Analysis</h3>
+              <p>Hover over highlighted text to see exactly which signals triggered the detection.</p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 3h6l3 9-3 9H3"/>
+                  <path d="M15 3h6l-3 9 3 9h-6"/>
+                </svg>
+              </div>
+              <h3>Context Menu</h3>
+              <p>Select any text and right-click to analyze. Quick access to detection anywhere on the web.</p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </div>
+              <h3>Custom Sensitivity</h3>
+              <p>Adjust detection threshold to your needs. From relaxed browsing to strict verification.</p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+              </div>
+              <h3>Custom Patterns</h3>
+              <p>Add your own words or phrases to the detection list. Train it for your specific needs.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="how-it-works" id="how-it-works">
+        <div class="container">
+          <div class="section-header fade-in">
+            <div class="section-badge">Simple</div>
+            <h2>how it works</h2>
+            <p>Three simple steps to start detecting AI text</p>
+          </div>
+          <div class="steps-container fade-in">
+            <div class="step-card">
+              <div class="step-number">1</div>
+              <h3>Install Extension</h3>
+              <p>Add Real Ink? to Chrome or Firefox in one click. No signup required.</p>
+              <span class="step-arrow">→</span>
+            </div>
+            <div class="step-card">
+              <div class="step-number">2</div>
+              <h3>Browse Normally</h3>
+              <p>Visit any website. The extension automatically scans visible text.</p>
+              <span class="step-arrow">→</span>
+            </div>
+            <div class="step-card">
+              <div class="step-number">3</div>
+              <h3>See Results</h3>
+              <p>AI-generated text is highlighted in real-time. Hover for details.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="detection" id="detection">
+        <div class="container">
+          <div class="section-header fade-in">
+            <div class="section-badge">Detection</div>
+            <h2>how we detect AI</h2>
+            <p>Multiple linguistic analysis techniques working together</p>
+          </div>
+          <div class="detection-cards stagger-children">
+            <div class="detection-card">
+              <h4>Word Frequency</h4>
+              <p>Analyzes vocabulary distribution patterns that differ between human and AI writing styles.</p>
+            </div>
+            <div class="detection-card">
+              <h4>Sentence Structure</h4>
+              <p>Detects uniform sentence lengths and patterns typical of LLM-generated output.</p>
+            </div>
+            <div class="detection-card">
+              <h4>Stylistic Markers</h4>
+              <p>Identifies AI-typical phrases like "delve into" or "it's important to note".</p>
+            </div>
+            <div class="detection-card">
+              <h4>Vocabulary Analysis</h4>
+              <p>Spots AI buzzwords and formal language patterns uncommon in human writing.</p>
+            </div>
+            <div class="detection-card">
+              <h4>Statistical Analysis</h4>
+              <p>Mathematical evaluation of text complexity, entropy, and variation metrics.</p>
+            </div>
+            <div class="detection-card">
+              <h4>Linguistic Structure</h4>
+              <p>Advanced analysis of grammar patterns, discourse coherence, and flow.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="comparison">
+        <div class="container">
+          <div class="section-header fade-in">
+            <div class="section-badge" style="background: rgba(255,255,255,0.2); color: white;">Compare</div>
+            <h2>why choose real ink?</h2>
+            <p>See how we compare to other AI detection tools</p>
+          </div>
+          <div class="comparison-table fade-in">
+            <div class="comparison-row header">
+              <span>Feature</span>
+              <span>Real Ink?</span>
+              <span>Others</span>
+            </div>
+            <div class="comparison-row">
+              <span>100% Offline</span>
+              <span class="check">✓</span>
+              <span class="cross">✗</span>
+            </div>
+            <div class="comparison-row">
+              <span>No Data Collection</span>
+              <span class="check">✓</span>
+              <span class="cross">✗</span>
+            </div>
+            <div class="comparison-row">
+              <span>No Account Required</span>
+              <span class="check">✓</span>
+              <span class="cross">✗</span>
+            </div>
+            <div class="comparison-row">
+              <span>Free Forever</span>
+              <span class="check">✓</span>
+              <span class="cross">✗</span>
+            </div>
+            <div class="comparison-row">
+              <span>Multi-language</span>
+              <span class="check">✓</span>
+              <span class="check">✓</span>
+            </div>
+            <div class="comparison-row">
+              <span>Real-time Inline Detection</span>
+              <span class="check">✓</span>
+              <span class="cross">✗</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="languages">
+        <div class="container">
+          <div class="section-header fade-in">
+            <div class="section-badge">Languages</div>
+            <h2>multilingual support</h2>
+            <p>Detect AI content in multiple languages</p>
+          </div>
+          <div class="lang-grid stagger-children">
+            <div class="lang-pill">English</div>
+            <div class="lang-pill">Spanish</div>
+            <div class="lang-pill">German</div>
+            <div class="lang-pill">French</div>
+            <div class="lang-pill">Russian</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="privacy" id="privacy">
+        <div class="container privacy-content">
+          <div class="privacy-text slide-in-left">
+            <h2>your privacy is sacred</h2>
+            <p>Everything happens locally on your device. No text ever leaves your browser. No cloud processing. No data collection. Period.</p>
+            <p>We believe privacy shouldn't be a feature - it should be the foundation.</p>
+          </div>
+          <div class="privacy-badges slide-in-right">
+            <div class="privacy-badge">
+              <span class="icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="3" width="20" height="14" rx="2"/>
+                  <path d="M8 21h8M12 17v4"/>
+                </svg>
+              </span>
+              100% Offline
+            </div>
+            <div class="privacy-badge">
+              <span class="icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                </svg>
+              </span>
+              No Data Collection
+            </div>
+            <div class="privacy-badge">
+              <span class="icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+              </span>
+              No Account Needed
+            </div>
+            <div class="privacy-badge">
+              <span class="icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                </svg>
+              </span>
+              Low CPU Usage
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="faq" id="faq">
+        <div class="container">
+          <div class="section-header fade-in">
+            <div class="section-badge">FAQ</div>
+            <h2>frequently asked questions</h2>
+            <p>Got questions? We've got answers.</p>
+          </div>
+          <div class="faq-grid fade-in">
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>How accurate is the AI detection?</span>
+                <span class="arrow">+</span>
+              </div>
+              <div class="faq-answer">
+                <p>Our detection uses multiple linguistic signals and achieves high accuracy on typical AI-generated content. However, no detector is 100% accurate - use it as one tool in your verification toolkit.</p>
+              </div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>Does it work on all websites?</span>
+                <span class="arrow">+</span>
+              </div>
+              <div class="faq-answer">
+                <p>Yes! Real Ink? works on any website with text content. You can also select specific text and analyze it via the context menu.</p>
+              </div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>Is my data sent anywhere?</span>
+                <span class="arrow">+</span>
+              </div>
+              <div class="faq-answer">
+                <p>Absolutely not. All processing happens locally in your browser. No text, no analytics, nothing leaves your device. Ever.</p>
+              </div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>Will it slow down my browser?</span>
+                <span class="arrow">+</span>
+              </div>
+              <div class="faq-answer">
+                <p>No. We've optimized for performance. The extension uses minimal CPU and memory, and you can configure it to scan only on demand.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta">
+        <div class="container fade-in">
+          <h2>start detecting AI text today</h2>
+          <p>Free, private, and works on any website. Install in seconds and join 50,000+ users.</p>
+          <div class="cta-buttons">
+            <a href="#" class="btn btn-lg">
+              Add to Chrome
+            </a>
+            <a href="https://addons.mozilla.org/en-US/firefox/addon/real-ink/" class="btn btn-lg btn-outline" target="_blank" rel="noopener">
+              Add to Firefox
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="more-extensions" id="more">
+        <div class="container">
+          <div class="section-header fade-in">
+            <div class="section-badge">More Tools</div>
+            <h2>explore our other extensions</h2>
+            <p>Privacy-first tools for a better browsing experience</p>
+          </div>
+          <div class="extensions-grid stagger-children">
+            <a href="/privacy-shield" class="extension-card">
+              <div class="extension-icon">PS</div>
+              <div class="extension-info">
+                <h3>Privacy Shield</h3>
+                <p>Detect fingerprinting, trackers, and dark patterns on any website.</p>
+              </div>
+              <span class="extension-arrow">→</span>
+            </a>
+            <a href="/pixel-proof" class="extension-card">
+              <div class="extension-icon">PP</div>
+              <div class="extension-info">
+                <h3>Pixel Proof</h3>
+                <p>Verify image authenticity and detect AI-generated images instantly.</p>
+              </div>
+              <span class="extension-arrow">→</span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            Real Ink?
+          </div>
+          <div class="footer-links">
+            <a href="#">GitHub</a>
+            <a href="/privacy.html">Privacy Policy</a>
+            <a href="#">Contact</a>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>Open source AI text detection. Made for a more authentic web.</p>
+        </div>
+      </div>
+    </footer>
+
+  </body>
+</html>
