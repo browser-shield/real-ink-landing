@@ -42,8 +42,8 @@
           <a href="#faq">FAQ</a>
           <a href="#more">More</a>
         </nav>
-        <a href="https://chromewebstore.google.com/detail/real-ink/dgjfphnbfedfmbdbdilkndjonmgljamp?hl=en" class="btn" target="_blank" rel="noopener">
-          Get Extension
+        <a href="https://chromewebstore.google.com/detail/real-ink/dgjfphnbfedfmbdbdilkndjonmgljamp?hl=en" class="btn" id="get-extension-btn">
+          <span class="btn-text">Get Extension</span>
         </a>
         <button class="mobile-menu-btn" aria-label="Menu">
           <span></span>
@@ -568,5 +568,14 @@
       </div>
     </footer>
 
+    <script>
+      (function() {
+        var isFirefox = navigator.userAgent.indexOf('Firefox') > -1;
+        var btn = document.getElementById('get-extension-btn');
+        if (btn && isFirefox) {
+          btn.href = 'https://addons.mozilla.org/en-US/firefox/addon/real-ink/';
+        }
+      })();
+    </script>
   </body>
 </html>
